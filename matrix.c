@@ -1,46 +1,44 @@
 #include "matrix.h"
 
-int assert(int assertion, char* message) {
-    if (assertion == 0) {
-        fprintf(stderr, "%s\n", message);
-        exit(1);
-    }
-
-    return 0;
-}
+/*
+The method of indexing any elements in matrix (i.e. two-dimension array) that stored in
+one-dimension array is "row index * number of columns + column index".
+*/
 
 matrix* create_matrix(int rows, int cols) {
-    assert(cols > 0 && rows > 0, "New matrix must be at least a 1 by 1");
-    matrix* out = (matrix*)malloc(sizeof(matrix));
-    assert(out != NULL, "Out of memory.");
+    matrix* output = (matrix*)malloc(sizeof(matrix));
+    if (!output) return NULL;
+    // calloc will directly return null matrix in lieu of subsequent memset when using malloc
+    output->data = calloc(rows * cols, sizeof(double));
+    if (!output->data) {
+        free(output);
+        return NULL;
+    }
+    output->rows = rows;
+    output->cols = cols;
 
-    out->rows = rows;
-    out->cols = cols;
-    out->data = (double*)calloc(rows * cols, sizeof(double));
-    assert(out->data != NULL, "Out of memory.");
-
-    return out;
+    return output;
 }
 
-int free_matrix(matrix* m) {
-    if (m != NULL) {
-        if (m->data != NULL) {
-            free(m->data);
-            m->data = NULL;
+int free_matrix(matrix* input) {
+    if (input != NULL) {
+        if (input->data != NULL) {
+            free(input->data);
+            input->data = NULL;
         }
-        free(m);
-        m = NULL;
+        free(input);
+        input = NULL;
     }
 
     return 0;
 }
 
-int print_matrix(matrix* m) {
-    double* ptr = m->data;
-    printf("%dx%d\n", m->rows, m->cols);
-    for (int i = 0; i < m->rows; i++) {
-        for (int j = 0; j < m->cols; j++) {
-            printf("%-12.6f", *(ptr++));
+int print_matrix(matrix* input) {
+    double* input_data = input->data;
+    printf("%dx%d\n", input->rows, input->cols);
+    for (int i = 0; i < input->rows; i++) {
+        for (int j = 0; j < input->cols; j++) {
+            printf("%-12.6f", *(input_data++));
         }
         printf("\n");
     }
@@ -48,54 +46,39 @@ int print_matrix(matrix* m) {
     return 0;
 }
 
-matrix* transpose_matrix(matrix* m) {
-    matrix* out = create_matrix(m->cols, m->rows);
-    double* ptr_out;
-    double* ptr_m = m->data;
+matrix* scale_matrix(matrix* input, double scale) {
+    matrix* output = create_matrix(input->rows, input->cols);
+    for (int i = 0; i < input->rows * input->cols; i++) {
+        output->data[i] = input->data[i] * scale;
+    }
 
-    for (int i = 0; i < m->rows; i++) {
-        ptr_out = &out->data[i];
-        for (int j = 0; j < m->cols; j++) {
-            *ptr_out = *ptr_m;
-            ptr_m++;
-            ptr_out += out->cols;
+    return output;
+}
+
+matrix* transpose_matrix(matrix* input) {
+    matrix* output = create_matrix(input->cols, input->rows);
+    for (int i = 0; i < output->rows; i++) {
+        for (int j = 0; j < output->cols; j++) {
+            output->data[i * output->cols + j] = input->data[j * input->cols + i];
         }
     }
 
-    return out;
+    return output;
 }
 
 matrix* dot_product_matrixes(matrix* a, matrix* b) {
-    double* ptr_a;
-    double* ptr_b;
-    assert(a->rows == b->cols, "Matrices have incorrect dimensions. a->width != b->height");
+    if (a->cols != b->rows) return NULL;
+    matrix* c = create_matrix(a->rows, b->cols);
 
-    matrix* out = create_matrix(a->rows, b->cols);
-    double* ptrOut = out->data;
-
-    for (int i = 0; i < a->rows; i++) {
-        for (int j = 0; j < b->cols; j++) {
-            ptr_a = &a->data[i * a->rows];
-            ptr_b = &b->data[j];
-
-            *ptrOut = 0;
-            for (int k = 0; k < a->rows; k++) {
-                *ptrOut += *ptr_a * *ptr_b;
-                ptr_a++;
-                ptr_b += b->rows;
+    for (int i = 0; i < c->rows; i++) {
+        for (int j = 0; j < c->cols; j++) {
+            for (int k = 0; k < a->cols; k++) {
+                double a_element = a->data[i * a->cols + k];
+                double b_element = b->data[k * b->cols + j];
+                c->data[i * c->cols + j] += a_element * b_element;
             }
-            ptrOut++;
         }
     }
 
-    return out;
-}
-
-matrix* scale_matrix(matrix* m, double scale) {
-    matrix* out = create_matrix(m->rows, m->cols);
-    for (int i = 0; i < out->rows * out->cols; i++) {
-        out->data[i] = m->data[i] * scale;
-    }
-
-    return out;
+    return c;
 }

@@ -1,0 +1,6 @@
+{
+    "C_Cpp.default.compilerPath": "gcc.exe",
+    "files.associations": {
+        "matrix.h": "c"
+    }
+}

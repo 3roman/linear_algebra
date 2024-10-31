@@ -12,16 +12,17 @@ int main() {
         }
     }
     neo->data[6] = 7;
-    matrix *scaled_matrix = scale_matrix(neo, 2);
-    matrix *spider = transpose_matrix(scaled_matrix);
-    matrix *product = dot_product_matrixes(neo, spider);
+    matrix *scaled_neo = scale_matrix(neo, 2);
+    matrix *spider = transpose_matrix(neo);
+    matrix *product = dot_product_matrixes(scaled_neo, spider);
     print_matrix(neo);
+    print_matrix(scaled_neo);
     print_matrix(spider);
     print_matrix(product);
 
     free_matrix(neo);
+    free_matrix(scaled_neo);
     free_matrix(spider);
-    free_matrix(scaled_matrix);
     free_matrix(product);
 
     return 0;
