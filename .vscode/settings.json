@@ -1,6 +1,8 @@
 {
     "C_Cpp.default.compilerPath": "gcc.exe",
     "files.associations": {
-        "matrix.h": "c"
+        "matrix.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c"
     }
 }
