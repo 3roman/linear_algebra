@@ -4,7 +4,7 @@
 The method of indexing any elements in matrix (i.e. two-dimension array) that stored in one-dimension array is "row index * number of columns + column index".
 */
 
-matrix* create_matrix(const int rows, const int cols) {
+matrix* create_matrix(int rows, int cols) {
     if (rows <= 0 || cols <= 0) {
         fprintf(stderr, "invalid matrix dimensions.\n");
         return NULL;
@@ -38,7 +38,7 @@ int free_matrix(matrix* input) {
     return 0;
 }
 
-int print_matrix(const matrix* input, const int decimal_places) {
+int print_matrix(const matrix* input, int decimal_places) {
     if (!input) {
         fprintf(stderr, "null reference.\n");
         return -1;
@@ -63,7 +63,7 @@ int print_matrix(const matrix* input, const int decimal_places) {
     return 0;
 }
 
-matrix* scale_matrix(const matrix* input, const double scale) {
+matrix* scale_matrix(const matrix* input, double scale) {
     if (!input) {
         fprintf(stderr, "null reference.\n");
         return NULL;
