@@ -10,10 +10,10 @@ typedef struct _matrix {
     double* data;
 } matrix;
 
-matrix* create_matrix(const int rows, const int cols);
+matrix* create_matrix(int rows, int cols);
 int free_matrix(matrix* input);
-int print_matrix(const matrix* input, const int decimal_places);
-matrix* scale_matrix(const matrix* m, const double scale);
+int print_matrix(const matrix* input, int decimal_places);
+matrix* scale_matrix(const matrix* m, double scale);
 matrix* transpose_matrix(const matrix* m);
 matrix* inverse_matrix(const matrix* input);
 matrix* add_matrixes(const matrix* a, const matrix* b);
