@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "../inc/matrix.h"
 
 /*
 The method of indexing any elements in matrix (i.e. two-dimension array) that stored in one-dimension array is "row index * number of columns + column index".

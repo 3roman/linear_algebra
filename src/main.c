@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "matrix.h"
+#include "../inc/matrix.h"
 
 int main() {
     int m = 3, n = 4;
