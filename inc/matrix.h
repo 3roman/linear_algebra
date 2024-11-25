@@ -5,12 +5,12 @@
 #include <stdlib.h>
 
 typedef struct _matrix {
-    int rows;
-    int cols;
+    int height;
+    int width;
     double* data;
 } matrix;
 
-matrix* create_matrix(int rows, int cols);
+matrix* create_matrix(int height, int width);
 int free_matrix(matrix* input);
 int print_matrix(const matrix* input, int decimal_places);
 matrix* scale_matrix(const matrix* m, double scale);
